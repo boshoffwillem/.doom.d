@@ -21,7 +21,7 @@
 ;; See 'C-h v doom-font' for documentation and more examples of what they
 ;; accept. For example:
 ;;
-(setq doom-font (font-spec :family "FantasqueSansMono Nerd Font" :size 13 :weight 'regular)
+(setq doom-font (font-spec :family "FantasqueSansMono Nerd Font" :size 15 :weight 'regular)
       doom-variable-pitch-font (font-spec :family "Cantarell" :size 14))
 ;;
 ;; If you or Emacs can't find your font, use 'M-x describe-font' to look them
@@ -32,13 +32,15 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-gruvbox)
+;; (setq doom-theme 'doom-gruvbox)
+(setq doom-theme 'doom-dark+)
+;; (setq doom-theme 'doom-one)
+;; (setq doom-theme 'doom-one-light)
 ;; (setq doom-theme 'doom-ayu-light)
 ;; (setq doom-theme 'doom-acario-light)
 ;; (setq doom-theme 'doom-old-hope)
 ;; (setq doom-theme 'doom-tomorrow-day)
 ;; (setq doom-theme 'doom-tomorrow-night)
-;; (setq doom-theme 'doom-one-light)
 ;; (load-theme 'intellij)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
@@ -86,12 +88,56 @@
       (:prefix-map ("l" . "lsp-actions")
        :desc "Code actions" "a" #'lsp-execute-code-action
        :desc "Find definition" "d" #'lsp-find-definition
+       (:prefix ("e" . "symbols")
+        :desc "Project errors" "p" #'consult-lsp-diagnostics
+        )
+       (:prefix ("f" . "format")
+        :desc "Format region" "r" #'lsp-format-region
+        :desc "Format buffer" "b" #'lsp-format-buffer
+        )
        :desc "Signature help" "h" #'lsp-ui-doc-show
        :desc "Find implementations" "i" #'lsp-find-implementation
+       (:prefix ("p" . "peek")
+        :desc "Peek definitions" "d" #'lsp-ui-peek-find-definitions
+        :desc "Peek implementations" "i" #'lsp-ui-peek-find-implementations
+        :desc "Peek usages" "u" #'lsp-ui-peek-find-references
+        )
+       :desc "Rename" "r" #'lsp-rename
        (:prefix ("s" . "symbols")
-        :desc "Search symbol in project" "a" #'consult-lsp-symbols
-        :desc "Search symbol in file" "s" #'consult-lsp-file-symbols
+        :desc "Search symbol in project" "p" #'consult-lsp-symbols
+        :desc "Search symbol in file" "f" #'consult-lsp-file-symbols
+        :desc "Show file symbols" "l" #'lsp-treemacs-symbols
         )
        :desc "Find usages" "u" #'lsp-find-references
        )
       )
+
+;; Turn off line wrapping
+(setq global-visual-line-mode nil)
+
+(after! company-mode
+  :config
+  (setq company-idle-delay 0
+        company-show-quick-access t)
+  )
+
+(after! lsp-mode
+  :config
+  (setq lsp-eldoc-render-all t
+        lsp-auto-execute-action nil
+        lsp-signature-doc-lines 100
+        lsp-diagnostic-clean-after-change t
+        lsp-headerline-breadcrumb-enable t
+        lsp-lens-place-position 'above-line)
+  )
+
+(after! lsp-ui
+  :config
+  (setq lsp-ui-sideline-show-diagnostics t
+        lsp-ui-sideline-show-hover nil
+        lsp-ui-sideline-show-code-actions nil
+        lsp-ui-sideline-update-mode 'point
+        lsp-ui-sideline-delay 0.2)
+  (setq lsp-ui-doc-enable t
+        lsp-ui-doc-position 'at-point)
+  )
