@@ -32,7 +32,7 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-;; (setq doom-theme 'doom-gruvbox)
+(setq doom-theme 'doom-gruvbox)
 ;; (setq doom-theme 'doom-dark+)
 ;; (setq doom-theme 'doom-one)
 ;; (setq doom-theme 'doom-one-light)
@@ -40,7 +40,7 @@
 ;; (setq doom-theme 'doom-acario-light)
 ;; (setq doom-theme 'doom-old-hope)
 ;; (setq doom-theme 'doom-tomorrow-day)
-(setq doom-theme 'doom-tomorrow-night)
+;; (setq doom-theme 'doom-tomorrow-night)
 ;; (load-theme 'intellij)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
@@ -141,3 +141,20 @@
   (setq lsp-ui-doc-enable t
         lsp-ui-doc-position 'at-point)
   )
+
+(defun wb/terraform-setup ()
+  "Setup for terraform mode."
+  (tree-sitter-require 'hcl)
+  (setq-local tab-width 2))
+
+(add-hook 'terraform-mode-hook #'wb/terraform-setup)
+(add-hook 'terraform-mode-hook #'lsp-deferred)
+
+(defun wb/yaml-setup ()
+  "Setup for yaml mode."
+  (setq-local tab-width 2)
+  (setq yaml-indent-offset 2)
+  (setq-local evil-shitf-width yaml-indent-offset)
+  )
+
+(add-hook 'yaml-mode-hook #'wb/yaml-setup)
