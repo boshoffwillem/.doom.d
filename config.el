@@ -51,6 +51,11 @@
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/org/")
 
+;; Improve garbage collection performance.
+(setq gc-cons-threshold (* 100 1024 1024))
+
+;; Improve processing of sub-processes that generates large chunk.
+(setq read-process-output-max (* 1024 1024))
 
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
 ;; `after!' block, otherwise Doom's defaults may override your settings. E.g.
@@ -149,6 +154,13 @@
 
 (add-hook 'terraform-mode-hook #'wb/terraform-setup)
 (add-hook 'terraform-mode-hook #'lsp-deferred)
+
+;; .xml files
+(setq nxml-slash-auto-complete-flag t)
+(add-hook 'nxml-mode-hook
+          (lambda ()
+            (setq-local tab-width 2)
+            ))
 
 (defun wb/yaml-setup ()
   "Setup for yaml mode."
