@@ -89,6 +89,8 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
+(add-hook 'prog-mode-hook #'global-tree-sitter-mode)
+
 (map! :leader
       (:prefix-map ("l" . "lsp-actions")
        :desc "Code actions" "a" #'lsp-execute-code-action
@@ -150,6 +152,7 @@
 (defun wb/terraform-setup ()
   "Setup for terraform mode."
   (tree-sitter-require 'hcl)
+  (tree-sitter-mode)
   (setq-local tab-width 2))
 
 (add-hook 'terraform-mode-hook #'wb/terraform-setup)
@@ -160,6 +163,7 @@
 (add-hook 'nxml-mode-hook
           (lambda ()
             (setq-local tab-width 2)
+            (tree-sitter-mode)
             ))
 
 (defun wb/yaml-setup ()
@@ -167,6 +171,7 @@
   (setq-local tab-width 2)
   (setq yaml-indent-offset 2)
   (setq-local evil-shitf-width yaml-indent-offset)
+  (tree-sitter-mode)
   )
 
 (add-hook 'yaml-mode-hook #'wb/yaml-setup)
